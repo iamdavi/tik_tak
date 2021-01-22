@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Listado de usuarios{% endblock %}
+
+{% block body %}
+    <h1>Listado de usuarios</h1>
+
+    <div class="container">
+        <div class="row">
+            {% for user in users %}
+                <div class="col-sm-4">
+                    <div class="card bg-dark">
+                        <div class="card-body">
+                            <p class="card-text float-left m-0">{{ user.username }}</p>
+                            <a href="{{ path('user_show', {id: user.id}) }}" class="float-right"> > </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

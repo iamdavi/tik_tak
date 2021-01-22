@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Index{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            {% include 'includes/components/publicacion/listado_publicaciones.html.twig' with { 'publicaciones' : publicaciones } %}
+        </div>
+    </div>
+{% endblock %}

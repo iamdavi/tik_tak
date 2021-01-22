@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Nueva publicación{% endblock %}
+
+{% block body %}
+    <h1>Nueva publicación</h1>
+
+    {{ form_start(form, {'attr': {'class': 'w-100'}}) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

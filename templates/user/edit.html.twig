@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Edit user{% endblock %}
+
+{% block body %}
+    <h1>Profile edition</h1>
+
+    {{ form_start(form_edit, {'attr': {'class': 'w-100'}}) }}
+        {{ form_widget(form_edit) }}
+    {{ form_end(form_edit) }}
+{% endblock %}

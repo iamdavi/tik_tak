@@ -1,0 +1,14 @@
+<div class="p-4 pt-5">
+    <a href="#" class="img logo rounded-circle mb-5"></a>
+    <ul>
+        <li>Username: {{ app.user.username }}</li>
+        <li>Segidores: {{ app.user.myFriends.count }}</li>
+        <li>Siguiendo: {{ app.user.friendsWithMe.count }}</li>
+        <li>Descripción: {{ app.user.description }}</li>
+    </ul>
+    <ul>
+        <li><a href="{{ path('user') }}">Mi perfil</a></li>
+        <li><a href="{{ path('user_list') }}">Usuarios</a></li>
+        <li><a href="{{ path('app_logout') }}">Salir</a></li>
+    </ul>
+</div>

@@ -1,0 +1,12 @@
+{# {% for publicacion in publicaciones %} #}
+    <div class="col-sm-12 col-lg-4">
+            {# {% include 'includes/components/publicacion/publicacion.html.twig' with { 'publicacion' : publicacion } %} #}
+            <video width="400" controls>
+                <source src="{{ vich_uploader_asset(publicacion, 'videoFile') }}" type="video/mp4">
+            </video>
+            <p>{{ publicacion.titulo }}</p>
+            <p>{{ publicacion.description }}</p>
+            <a href="{{ path('publicacion_edit', {'id' : publicacion.id }) }}" class="btn btn-dark">Editar publicacion</a>
+        <br>
+    </div>
+{# {% endfor %} #}

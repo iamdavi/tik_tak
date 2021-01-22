@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - User profile{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% include 'includes/user/card_user_info_row.html.twig' %}
+        <hr>
+        {% include 'includes/user/publicaciones_creadas_tab.html.twig' %}
+    </div>
+{% endblock %}

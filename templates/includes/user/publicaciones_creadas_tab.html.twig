@@ -1,0 +1,23 @@
+<div class="row justify-content-between">
+    <div class="col">
+        <h3>Publicaciones creadas</h3>
+    </div>
+    <div class="col">
+        {% if user is same as(app.user) %}
+            <a href="{{ path('publicacion_new') }}" class="btn btn-light float-right">Añadir publicación</a>
+        {% else %}
+            <a href="{{ path('user_list') }}" class="btn btn-light float-right">Volver al listado</a>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    {% if (user.isPublic or user is same as(app.user)) %}
+        {% for publicacion in user.publicaciones %}
+            {% include 'includes/components/publicacion/listado_publicaciones.html.twig' with { 'publicacion' : publicacion } %}
+        {% endfor %}
+    {% else %}
+        <div class="col">
+            <p><i>- El perfil del usuario es privado, siguelo para empezar a ver sus publicaciones -</i></p>
+        </div>
+    {% endif %}
+</div>
