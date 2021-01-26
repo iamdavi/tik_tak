@@ -84,10 +84,16 @@ class User implements UserInterface
      */
     private $publicaciones;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Likes", mappedBy="user")
+     */
+    private $likes;
+
     public function __construct() {
         $this->friendsWithMe    = new \Doctrine\Common\Collections\ArrayCollection();
         $this->myFriends        = new \Doctrine\Common\Collections\ArrayCollection();
         $this->publicaciones    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likes            = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
@@ -286,6 +292,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($publicacione->getUser() === $this) {
                 $publicacione->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Likes[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
             }
         }
 

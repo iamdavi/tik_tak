@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - Ver publicación{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <h1>Ver publicación</h1>
+        <a href="{{ path('default') }}" class="btn btn-dark">Listado general de publicaciones</a>
+    </div>
+    <video width="400" controls>
+        <source src="{{ vich_uploader_asset(publicacion, 'videoFile') }}" type="video/mp4">
+    </video>
+    <p>Titutlo: {{ publicacion.titulo }}</p>
+    <p>Descripcion: {{ publicacion.description }}</p>
+    <p>Número de likes: {{ numero_likes }}</p>
+    {% if publicacion.hastags %}
+        <p>Hastags:</p>
+        <ul>
+            {% for item in publicacion.hastags %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        {{ form_start(like_form) }}
+            {{ form_widget(like_form) }}
+        {{ form_end(like_form) }}
+    {% endif %}
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PublicacionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -31,11 +33,6 @@ class Publicacion
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $likes;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="publicaciones")
@@ -97,6 +94,21 @@ class Publicacion
     private $updated;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Likes", mappedBy="publicacion")
+     */
+    private $likes;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $hastags;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
+
+    /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the update. If this
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
@@ -154,18 +166,6 @@ class Publicacion
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(?int $likes): self
-    {
-        $this->likes = $likes;
 
         return $this;
     }
@@ -238,6 +238,48 @@ class Publicacion
     public function setUpdated(\DateTimeInterface $updated): self
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Likes[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setPublicacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getPublicacion() === $this) {
+                $like->setPublicacion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHastags()
+    {
+        return $this->hastags;
+    }
+
+    public function setHastags(array $hastags): self
+    {
+        $this->hastags = $hastags;
 
         return $this;
     }

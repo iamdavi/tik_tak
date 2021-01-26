@@ -12,9 +12,7 @@
 </div>
 <div class="row">
     {% if (user.isPublic or user is same as(app.user)) %}
-        {% for publicacion in user.publicaciones %}
-            {% include 'includes/components/publicacion/listado_publicaciones.html.twig' with { 'publicacion' : publicacion } %}
-        {% endfor %}
+        {% include 'includes/components/publicacion/listado_publicaciones.html.twig' with { 'publicaciones' : publicaciones } %}
     {% else %}
         <div class="col">
             <p><i>- El perfil del usuario es privado, siguelo para empezar a ver sus publicaciones -</i></p>

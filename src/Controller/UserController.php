@@ -9,7 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UserType;
 use App\Form\SeguirUserType;
+use App\Form\PublicacionHastagType;
 use App\Entity\User;
+use App\Entity\Publicacion;
 
 class UserController extends AbstractController
 {
@@ -18,12 +20,26 @@ class UserController extends AbstractController
      * 
      * @Route("/user", name="user")
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         // Usuario logueado
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        $publicaciones = $em->getRepository(Publicacion::class)->getPublicacionesByUser($user);
+        $hastags_existentes = $em->getRepository(Publicacion::class)->getAllHastags();
+        array_unshift($hastags_existentes, null);
+        $filter_form = $this->createForm(PublicacionHastagType::class, $user, [
+            'hastags' => $hastags_existentes
+        ]);
+        $filter_form->handleRequest($request);
+        if ($filter_form->isSubmitted() && $filter_form->isValid()) {
+            $hastag_seleccionado = $filter_form['hastag']->getData();
+            $publicaciones = $em->getRepository(Publicacion::class)->getPublicacionesByHastag($hastag_seleccionado);
+        }
         return $this->render('user/index.html.twig', [
-            'user' => $user
+            'user' => $user,
+            'publicaciones' => $publicaciones,
+            'filter_form' => $filter_form->createView()
         ]);
     }
 
@@ -63,6 +79,7 @@ class UserController extends AbstractController
      */
     public function show(Request $request, EntityManagerInterface $em, User $user): Response
     {
+        $publicaciones = $user->getPublicaciones();
         $logged_user = $this->getUser();
         $siguiendo = $logged_user->getMyFriends()->contains($user);
         $form = $this->createForm(SeguirUserType::class, $user, [
@@ -82,6 +99,7 @@ class UserController extends AbstractController
         }
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'publicaciones' => $publicaciones,
             'seguir_form' => $form->createView()
         ]);
     }

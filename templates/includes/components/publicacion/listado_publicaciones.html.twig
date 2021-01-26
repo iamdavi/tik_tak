@@ -1,4 +1,4 @@
-{# {% for publicacion in publicaciones %} #}
+{% for publicacion in publicaciones %}
     <div class="col-sm-12 col-lg-4">
             {# {% include 'includes/components/publicacion/publicacion.html.twig' with { 'publicacion' : publicacion } %} #}
             <video width="400" controls>
@@ -6,7 +6,16 @@
             </video>
             <p>{{ publicacion.titulo }}</p>
             <p>{{ publicacion.description }}</p>
-            <a href="{{ path('publicacion_edit', {'id' : publicacion.id }) }}" class="btn btn-dark">Editar publicacion</a>
+            <ul>
+                {% for item in publicacion.hastags %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% if publicacion.user is same as(app.user) %}
+                <a href="{{ path('publicacion_edit', {'id' : publicacion.id }) }}" class="btn btn-dark">Editar publicacion</a>
+            {% else %} 
+                <a href="{{ path('publicacion_show', {'id' : publicacion.id }) }}" class="btn btn-dark">Ver publicacion</a>
+            {% endif %}
         <br>
     </div>
-{# {% endfor %} #}
+{% endfor %}

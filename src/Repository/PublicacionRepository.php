@@ -19,6 +19,46 @@ class PublicacionRepository extends ServiceEntityRepository
         parent::__construct($registry, Publicacion::class);
     }
 
+    public function getPublicacionesByUser($user)
+    {
+        $user_id = $user ? $user->getId() : '0';
+        $publicaciones = $this->createQueryBuilder('p')
+            ->innerJoin('p.user', 'u')
+            ->where('u.id = :user_id')->setParameter('user_id', $user_id)
+            ->orderBy('p.created', 'desc')
+            ->getQuery()
+            ->getResult();
+
+        return $publicaciones;
+    }
+
+    public function getAllHastags()
+    {
+        $publicaciones = $this->createQueryBuilder('p')->orderBy('p.created', 'desc')->getQuery()->getResult();
+        $hastags_existentes = [];
+        foreach ($publicaciones as $publicacion) {
+            $hastags = $publicacion->getHastags();
+            if ($hastags) {
+                foreach ($hastags as $hastag) {
+                    if (!in_array($hastag, $hastags_existentes)) {
+                        $hastags_existentes[] = $hastag;
+                    }
+                }
+            }
+        }
+        return $hastags_existentes;
+    }
+
+    public function getPublicacionesByHastag($hastag) {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.hastags LIKE :hastag')
+            ->setParameter('hastag', '%'.$hastag.'%')
+            ->getQuery()
+            ->getResult();
+
+        return $qb;
+    }
+
     public function getPublicacionesPublicas()
     {
         $qb = $this->createQueryBuilder('p')

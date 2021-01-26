@@ -5,6 +5,11 @@
 {% block body %}
     <div class="container">
         <div class="row">
+            <div class="col-12">
+                {{ form_start(filter_form) }}
+                    {{ form_widget(filter_form) }}
+                {{ form_end(filter_form) }}
+            </div>
             {% include 'includes/components/publicacion/listado_publicaciones.html.twig' with { 'publicaciones' : publicaciones } %}
         </div>
     </div>
